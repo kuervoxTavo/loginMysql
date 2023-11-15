@@ -1,0 +1,13 @@
+import app from './app.js'
+
+
+
+
+
+
+
+
+
+
+app.listen(3000);
+console.log('escuchando por le pueto ', 3000)
