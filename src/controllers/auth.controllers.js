@@ -1,3 +1,4 @@
+// Encripta el password, y verifica si coincide
 import bcryptjs from "bcryptjs";
 
 // Importa la conexion a la base de datos
@@ -35,6 +36,7 @@ export const register = async (req, res) => {
 
     // Retorna el id insertado del usuario
     res.send({ id: result.insertId });
+    
   } catch (error) {
     res.sendStatus(505);
   }
@@ -69,7 +71,6 @@ export const login = async (req, res) => {
     // Genera un token con el usuario y el tipo
     const token = await createToken({
       id: usuario.idusers,
-      tipo: usuario.tipo,
     });
 
     /* Responde el token en un cookie */
@@ -88,9 +89,35 @@ export const login = async (req, res) => {
 
 /* cierra la session del usuario */
 export const logout = (req, res) => {
-
-
+  // Elimina la cookie
   res.cookie("token", "", { expires: new Date(0) });
 
   res.sendStatus(200);
+};
+
+/* Funcion protegida  */
+
+export const home = async (req, res) => {
+  console.log(req.user.id);
+
+  /* Verifica si no existe el usuario */
+  const [result] = await pool.query(
+    `select e.nombre , u.tipo 
+    from logindb.users u, logindb.empleados e 
+    where u.id_empleado = e.idempleados and 
+    u.idusers = ?`,
+    [req.user.id]
+  );
+
+  /* Envia un mensaje de erro  */
+  if (result.length === 0) return res.sendStatus(404);
+
+  const usuario = result[0];
+
+  res.json({
+    idusers: req.user.id,
+    nombre: usuario.nombre,
+    tipo: usuario.tipo,
+  });
+  
 };
