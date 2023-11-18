@@ -1,29 +1,20 @@
-import axios from "axios";
-
 // Constante de la API
 const API = "http://localhost:3000/api";
 
-export const registerRequest = (usuario) =>
-  axios
-    .post(`${API}/register`, usuario)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
+export const registerRequest = async (usuario) => {
+  try {
+    const res = await fetch(`${API}/register`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(usuario),
     });
 
-/* 
-  
-  axios.post('/user', {
-    firstName: 'Fred',
-    lastName: 'Flintstone'
-  })
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
+    return res.status;
+
+  } catch (error) {
     console.log(error);
-  });
+  }
+};
   
-  */

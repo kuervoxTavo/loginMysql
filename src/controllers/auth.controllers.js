@@ -35,7 +35,7 @@ export const register = async (req, res) => {
     if (result.affectedRows === 0) return res.sendStatus(404);
 
     // Retorna el id insertado del usuario
-    res.send({ id: result.insertId });
+    res.sendStatus(202);
     
   } catch (error) {
     res.sendStatus(505);
